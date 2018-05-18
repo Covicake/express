@@ -20,11 +20,13 @@ app.use((error, req, res, next) => {
   }
   let errorSlack;
   if(error == 400){
-    errorSlack={ text: "Error de input"};
+    errorSlack = { text: "Error de input", username: "Covierror", icon_emoji: ":ghost:"};
   }else if(error == "save err"){
-    errorSlack= { text: "Error saving changes"};
+    errorSlack = { text: "Error saving changes", username: "Covierror", icon_emoji: ":ghost:"};
+  }else if(error == "Pelicula repetida"){
+    errorSlack =  {text: "La pelicula esta repetida", username: "Covierror", icon_emoji: ":ghost:"};
   }
-  request.post('https://hooks.slack.com/services/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')
+  request.post('https://hooks.slack.com/services/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')
          .send(errorSlack)
          .end(err => {
            next(err);
