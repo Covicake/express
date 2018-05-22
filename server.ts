@@ -1,6 +1,8 @@
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as request from 'superagent';
+import * as passport from 'passport';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
 import * as session from 'express-session';
 import * as methodOverride from 'method-override';
 import * as compression from 'compression';
@@ -13,6 +15,7 @@ const corsOptions = {};
 const sessionOptions = {
   secret: '1234',
 };
+
 
 const app = express();
 
@@ -36,27 +39,24 @@ function errorHandler(err, req, res, next) {
          });
 }
 
-function decodeBase64(str) {
-  return Buffer.from(str, 'base64').toString();
-}
+passport.use(new FacebookStrategy({
+  clientID: '477936419276413',
+  clientSecret: '67e6845f97240e55f273eaf17fbeb779',
+  callbackURL: 'https://localhost:3000/auth/facebook/callback',
+}, (accessToken, refreshToken, profile, done) => {
+  const result = profile;
+}));
 
-function authentication(req, res, next) {
-  if (req.method === 'GET') {
-    return next();
-  }
+app.get('/auth/facebook/', passport.authenticate('facebook'));
 
-  const basicAuth = req.headers.authorization.split(' ')[1];
-  const userPassword = decodeBase64(basicAuth).split(':');
-  if (userPassword[0] === 'Pepe' && userPassword[1] === 'juan') {
-    return next();
-  }
-  res.status(500).send('Permiso denegado');
-}
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/movies',
+  failureRedirect: '/auth/facebook'
+}));
 
 app.use(express.json());
 app.use(morgan('combined'));
 app.use(compression());
-app.use(authentication);
 app.use(session(sessionOptions));
 
 app.use('/movies', moviesRouter);
