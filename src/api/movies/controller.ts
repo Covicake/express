@@ -19,13 +19,36 @@ function cleanReq(requestMovie: Movie): Movie {
 
 loadData((moviesData) => movies = moviesData);
 
-export function getLikes(): Movie[] {
-  const likedMovies = movies.filter((movie) => movie.like === true);
-  return likedMovies;
+export function getLikes(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    MongoClient.connect(MONGOURL, (err, client) => {
+      if (!err) {
+        const db = client.db('moviesDB');
+        const moviesCollection = db.collection('movies');
+        moviesCollection.find({ like: true }).toArray()
+          .then((movies) => resolve(movies))
+          .catch((error) => reject(error));
+      } else {
+        reject(err);
+      }
+    });
+  });
 }
 
-export function getMovies(): Movie[] {
-  return movies;
+export function getMovies(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    MongoClient.connect(MONGOURL, (err, client) => {
+      if (!err) {
+        const db = client.db('moviesDB');
+        const moviesCollection = db.collection('movies');
+        moviesCollection.find({}).limit(20).toArray()
+          .then(movies => resolve(movies))
+          .catch((errorFind) => reject(errorFind));
+      } else {
+        reject(err);
+      }
+    });
+  });
 }
 
 export function getMovie(movieId: string): Promise<any> {
@@ -63,44 +86,33 @@ export function postMovie(body): Promise<any> {
 
 export function modifyMovie(movieId: string, newMovie: Movie): Promise<any> {
   return new Promise((resolve, reject) => {
-    const movieIndex = movies.findIndex((movie) => movie.id === movieId);
-
-    if (!movieIndex) {
-      reject(400); // Invalid Id
-    } else {
-      newMovie = cleanReq(newMovie);
-      const movie: Movie = {...movies[movieIndex], ...newMovie};
-      movies[movieIndex] = movie;
-
-      saveData(movies, (saveResponse) => {
-        if (saveResponse) {
-          reject('save err');
-        } else {
-          resolve(movies[movieIndex]);
-        }
-      });
-    }
+    MongoClient.connect(MONGOURL, (err, client) => {
+      if (!err) {
+        const db = client.db('moviesDB');
+        const moviesCollection = db.collection('movies');
+        moviesCollection.findOneAndUpdate({ _id: new ObjectId(movieId) }, {$set: {...newMovie, updated: new Date()}}, { returnOriginal: false, upsert: false})
+          .then(() => resolve())
+          .catch((error) => reject(error));
+      } else {
+        reject(err);
+      }
+    });
   });
 }
 
 export function deleteMovie(movieId: string): Promise<any> {
   return new Promise((resolve, reject) => {
-    const movieIndex = movies.findIndex((movie) => movie.id === movieId);
-
-    if (movieIndex >= 0) {
-      movies.splice(movieIndex, 1);
-
-      saveData(movies, (saveResponse) => {
-        if (saveResponse) {
-          reject('save err');
-        } else {
-          resolve(200);
-        }
-      });
-
-    } else {
-      reject(400);
-    }
+    MongoClient.connect(MONGOURL, (err, client) => {
+      if (!err) {
+        const db = client.db('moviesDB');
+        const moviesCollection = db.collection('movies');
+        moviesCollection.deleteOne({_id: new ObjectId(movieId)})
+          .then(() => resolve())
+          .catch((error) => reject(error));
+      } else {
+        reject(err);
+      }
+    });
   });
 }
 
