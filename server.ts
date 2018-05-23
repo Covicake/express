@@ -42,7 +42,7 @@ function errorHandler(err, req, res, next) {
 passport.use(new FacebookStrategy({
   clientID: '477936419276413',
   clientSecret: '67e6845f97240e55f273eaf17fbeb779',
-  callbackURL: 'https://localhost:3000/auth/facebook/callback',
+  callbackURL: 'http://localhost:3000/auth/facebook/callback',
 }, (accessToken, refreshToken, profile, done) => {
   const result = profile;
 }));
