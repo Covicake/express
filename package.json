@@ -17,6 +17,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "method-override": "^2.3.10",
+    "mongodb": "^3.1.0-beta4",
     "morgan": "^1.9.0",
     "nodemon": "^1.17.4",
     "passport": "^0.4.0",
@@ -26,6 +27,7 @@
     "ts-node": "^6.0.3"
   },
   "devDependencies": {
+    "@types/mongodb": "^3.0.18",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
   }
