@@ -116,20 +116,18 @@ export function deleteMovie(movieId: string): Promise<any> {
   });
 }
 
-export function toggleLike(movieId: string): Promise<any> {
+export function setLike(movieId: string, likeValue: boolean): Promise<any> {
   return new Promise((resolve, reject) => {
-    const movieIndex = movies.findIndex((movie) => movie.id === movieId);
-
-    if (movieIndex >= 0) {
-      movies[movieIndex].like = movies[movieIndex].like === false ? true : false;
-
-      saveData(movies, (saveResponse) => {
-        if (saveResponse) {
-          reject('save err');
-        } else {
-          resolve(movies[movieIndex]);
-        }
-      });
-    }
+    MongoClient.connect(MONGOURL, (err, client) => {
+      if (!err) {
+        const db = client.db('moviesDB');
+        const moviesCollection = db.collection('movies');
+        moviesCollection.findOneAndUpdate({ _id: new ObjectId(movieId)}, {$set: {like: likeValue, updated: new Date()}}, { returnOriginal: false, upsert: false })
+          .then(() => resolve())
+          .catch((error) => reject(error));
+      } else {
+        reject(err);
+      }
+    });
   });
 }

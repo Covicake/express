@@ -39,21 +39,6 @@ function errorHandler(err, req, res, next) {
          });
 }
 
-passport.use(new FacebookStrategy({
-  clientID: '477936419276413',
-  clientSecret: '67e6845f97240e55f273eaf17fbeb779',
-  callbackURL: 'https://localhost:3000/auth/facebook/callback',
-}, (accessToken, refreshToken, profile, done) => {
-  const result = profile;
-}));
-
-app.get('/auth/facebook/', passport.authenticate('facebook'));
-
-app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  successRedirect: '/movies',
-  failureRedirect: '/auth/facebook'
-}));
-
 app.use(express.json());
 app.use(morgan('combined'));
 app.use(compression());

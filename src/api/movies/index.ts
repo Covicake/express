@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { getLikes, getMovies, getMovie, postMovie, modifyMovie, deleteMovie, toggleLike } from './controller';
+import { getLikes, getMovies, getMovie, postMovie, modifyMovie, deleteMovie, setLike } from './controller';
 const router = express.Router();
 
 router.use(express.json());
@@ -27,8 +27,8 @@ router.delete('/:id', (req, res, next) => { deleteMovie(req.params.id).then((res
                                                                                 .catch((response) => next(response));
 });
 
-router.put('/:id/toggle_like', (req, res, next) => {
-  toggleLike(req.params.id).then((response) => res.send(response))
+router.put('/:id/set_like', (req, res, next) => {
+  setLike(req.params.id, req.body).then((response) => res.send(response))
                                       .catch((response) => next(response));
 });
 
