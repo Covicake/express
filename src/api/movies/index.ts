@@ -4,9 +4,11 @@ const router = express.Router();
 
 router.use(express.json());
 
-router.get('/likes', (req, res) => res.send(getLikes()));
+router.get('/likes', (req, res, next) => getLikes().then((movies) => res.send(movies))
+                                                   .catch((err) => next(err)));
 
-router.get('/', (req, res) => getMovies().then((movies) => res.send(movies)));
+router.get('/', (req, res, next) => getMovies().then((movies) => res.send(movies))
+                                         .catch((err) => next(err)));
 
 router.get('/:id', (req, res, next) => {
   getMovie(req.params.id).then((response) => res.send(response))
