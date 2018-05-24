@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "Coolvetica";
+    src: url("/fonts/Coolvetica rg.ttf");
+    }
+
+    .contenedor{
+        font-family: Coolvetica;
+        text-size: 16px;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(135deg, rgba(0,0,255,.6), rgba(0,0,255,0) 70.71%),
+                  linear-gradient(45deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+                  linear-gradient(225deg, rgba(255,45,70,.8), rgba(255,40,70,.5) 70.71%),
+                  linear-gradient(315deg, rgba(0,255,0,.8), rgba(255,0,0,0) 70.71%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .log{
+        height: 230px;
+        width: 380px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        background: rgba(255,45,70, .05);
+        box-shadow: 0px 0px 20px 0px;
+      }
+      
+      .in{
+        height: 32px;
+        width: 320px;
+        text-align: center;
+      }
+      
+      .but{
+          width: 220px;
+          background: rgba(192, 192, 192, .25);
+          border: 1px solid transparent;
+      }
