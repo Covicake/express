@@ -8,7 +8,7 @@ const elems = {
   
 function submit(){
     if(elems.name.value != "" && elems.pass.value != ""){
-        fetch('http://127.0.0.1:3000/users/Auth', {  
+        fetch('http://api.covicake.me:3000/users/Auth', {  
             method: 'post',  
             headers: {
               'Accept': 'application/json',
