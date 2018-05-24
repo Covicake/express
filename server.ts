@@ -8,6 +8,7 @@ import * as methodOverride from 'method-override';
 import * as compression from 'compression';
 import * as cors from 'cors';
 import * as moviesRouter from './src/api/movies';
+import * as usersRouter from './src/api/users';
 
 import { SlackMessage } from './src/classes/SlackMessage';
 
@@ -44,6 +45,7 @@ app.use(morgan('combined'));
 app.use(compression());
 app.use(session(sessionOptions));
 
+app.use('/users', usersRouter);
 app.use('/movies', moviesRouter);
 
 app.use(errorHandler);

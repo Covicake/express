@@ -8,11 +8,12 @@ const elems = {
   
 function submit(){
     if(elems.name.value != "" && elems.pass.value != ""){
-        fetch('localhost:3000/userAuth', {  
+        fetch('http://127.0.0.1:3000/users/Auth', {  
             method: 'post',  
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify({
                 name: elems.name.value,
